@@ -17,7 +17,7 @@ export class ChatHistoryService {
 
   public async findByChatId(chat_id: number) {
     return this.chatHistoryRepository.find({
-      where: { chat_id: chat_id },
+      where: { chat: { id: chat_id } },
       order: { created_at: 'ASC' }
     });
   }

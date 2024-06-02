@@ -1,5 +1,7 @@
 import { hash } from 'argon2';
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
+import { Chat } from '@chat/entities/chat.entity';
 
 @Entity()
 export class User {
@@ -11,6 +13,11 @@ export class User {
 
     @Column('varchar', { nullable: false })
     public password: string;
+
+    @OneToMany(() => Chat, (chat) => chat.user, {
+        cascade: true,
+    })
+    public chats: Chat[];
 
     @BeforeInsert()
     async hashPassword() {

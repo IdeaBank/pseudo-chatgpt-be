@@ -20,7 +20,7 @@ export class ChatService {
 
     let chats = await this.chatRepository.find({
       where: {
-        user_uuid: uuid
+        user: { uuid: uuid }
       }
     });
 
@@ -43,7 +43,7 @@ export class ChatService {
 
     let chats: Chat[] = await this.findUserChats();
 
-    let isChatExist = chats.some(chat => { chat.user_uuid === uuid && chat.id === id });
+    let isChatExist = chats.some(chat => { chat.user.uuid === uuid && chat.id === id });
 
     if (!isChatExist)
       return false;

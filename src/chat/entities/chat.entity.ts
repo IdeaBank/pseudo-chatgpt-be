@@ -12,10 +12,10 @@ export class Chat {
     public name: string;
 
     @ManyToOne(() => User, { createForeignKeyConstraints: true })
-    @JoinColumn({ referencedColumnName: 'uuid' })
-    public user_uuid: string;
+    @JoinColumn({ name: 'user_uuid', referencedColumnName: 'uuid' })
+    public user: User;
 
-    @OneToMany(() => ChatHistory, (chatHistory) => chatHistory.chat_id, {
+    @OneToMany(() => ChatHistory, (chatHistory) => chatHistory.chat, {
         cascade: true,
     })
     public chatHistories: ChatHistory[];

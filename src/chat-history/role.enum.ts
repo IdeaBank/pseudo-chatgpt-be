@@ -1,3 +1,3 @@
 export enum Role {
-    user, system, assistant
+    user = 'user', system = 'system', assistant = 'assistant'
 }
