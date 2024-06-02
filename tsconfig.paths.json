@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./",
+        "paths": {
+            "@common/*": [
+                "./src/common/*"
+            ],
+            "@user/*": [
+                "./src/user/*"
+            ],
+            "@auth/*": [
+                "./src/auth/*"
+            ],
+            "@chat/*": [
+                "./src/chat/*"
+            ],
+            "@chat-history/*": [
+                "./src/chat-history/*"
+            ],
+            "@root/*": [
+                "./src/*"
+            ],
+        }
+    }
+}
