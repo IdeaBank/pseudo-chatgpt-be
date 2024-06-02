@@ -20,11 +20,7 @@ class OpenAiInstance {
         return OpenAiInstance.instance;
     }
 
-    public async makeChatRequest(messages: any, addHistory: Function, question: string) {
-        addHistory('user', question);
-
-        messages = [...messages, { role: 'user', content: question }];
-
+    public async makeChatRequest(messages: any) {
         const params: OpenAI.Chat.ChatCompletionCreateParams = {
             messages: messages,
             model: 'gpt-4o'
