@@ -19,8 +19,8 @@ export class AuthService {
 
     public async login(loginDto: any): Promise<any> {
         let result = await this.validateUser(loginDto);
-        let email = result.email;
+        let uuid = result.uuid;
 
-        return { access_token: this.jwtService.sign({ email }) };
+        return { access_token: this.jwtService.sign({ uuid }) };
     }
 }

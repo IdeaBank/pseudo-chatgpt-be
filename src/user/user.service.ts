@@ -21,11 +21,18 @@ export class UserService {
     let user: User = this.userRepository.create(createUserDto);
     await this.userRepository.insert(user);
 
-    // TODO: return status true
     return;
   }
 
-  remove() {
+  public async getUser(userDto: any): Promise<any> {
+    let user: User = await this.userRepository.findOne({
+      where: [{ email: userDto.email }, { uuid: userDto.uuid }]
+    });
+
+    if (!user)
+      throw ErrorType.USER_NOT_FOUND();
+
+    return user;
   }
 
   public async tryLogin(loginDto: LoginDto): Promise<User> {
@@ -56,16 +63,5 @@ export class UserService {
       throw ErrorType.EMAIL_DUPLICATE();
 
     return;
-  }
-
-  private async getUser(userDto: any): Promise<any> {
-    let user: User = await this.userRepository.findOne({
-      where: { email: userDto.email }
-    });
-
-    if (!user)
-      throw ErrorType.USER_NOT_FOUND();
-
-    return user;
   }
 }

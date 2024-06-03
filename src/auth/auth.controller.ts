@@ -17,6 +17,6 @@ export class AuthController {
 
     @Get('profile')
     public async getProfile(@Request() req: any): Promise<any> {
-        return { email: req.user.email };
+        return { uuid: req.user.uuid };
     }
 }
