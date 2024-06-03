@@ -1,8 +1,7 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { LoginDto } from '@user/dto/user-login.dto';
-import { User } from '@user/entities/user.entity';
 import { UserService } from '@user/user.service';
 
 @Injectable()
@@ -13,23 +12,14 @@ export class AuthService {
 
     public async validateUser(loginDto: LoginDto): Promise<any> {
         const user = await this.userService.tryLogin(loginDto);
+        const { ...result } = user;
 
-        if (user instanceof User) {
-            const { ...result } = user;
-
-            return result;
-        }
-
-        throw user;
+        return result;
     }
 
     public async login(loginDto: any): Promise<any> {
         let result = await this.validateUser(loginDto);
-
-        if (result instanceof HttpException)
-            throw result;
-
-        let email = loginDto.email;
+        let email = result.email;
 
         return { access_token: this.jwtService.sign({ email }) };
     }

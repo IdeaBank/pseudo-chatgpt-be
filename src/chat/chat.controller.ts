@@ -7,7 +7,7 @@ export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
   @Get()
-  public async findUserChats() {
+  public async findUserChats(): Promise<any> {
     return await this.chatService.findUserChats();
   }
 

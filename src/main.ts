@@ -1,4 +1,7 @@
+import { HttpExceptionFilter } from '@common/response/exception.interceptor';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { useContainer } from 'class-validator';
 
 import { AppModule } from '@root/app.module';
 
@@ -11,7 +14,20 @@ async function bootstrap() {
     credentials: true,
   });
 
-  await app.listen(3000);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
+
+  app.useGlobalFilters(new HttpExceptionFilter());
+
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
+
+  await app.listen(process.env.PORT || 3000);
 }
 
 bootstrap();

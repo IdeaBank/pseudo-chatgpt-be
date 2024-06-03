@@ -6,6 +6,7 @@ import { CreateUserDto } from '@user/dto/create-user.dto';
 import { LoginDto } from '@user/dto/user-login.dto';
 import { User } from '@user/entities/user.entity';
 import { UserRepository } from '@user/user.repository';
+import { ErrorType } from '@common/response/error.response';
 
 @Injectable()
 export class UserService {
@@ -33,9 +34,13 @@ export class UserService {
     let isPasswordCorrect = await verify(user.password, loginDto.password);
 
     if (!isPasswordCorrect)
-      throw new Error();
+      throw ErrorType.INCORRECT_PASSWORD();
 
     return user;
+  }
+
+  public async findByEmail(email: string): Promise<User> {
+    return await this.userRepository.findOne({ where: { email: email } });
   }
 
   private async ckeckUserDuplicate(userDto: any): Promise<any> {
@@ -48,7 +53,7 @@ export class UserService {
     }
 
     if (email_duplicate)
-      throw new Error();
+      throw ErrorType.EMAIL_DUPLICATE();
 
     return;
   }
@@ -58,8 +63,8 @@ export class UserService {
       where: { email: userDto.email }
     });
 
-    if(!user)
-      throw new Error();
+    if (!user)
+      throw ErrorType.USER_NOT_FOUND();
 
     return user;
   }

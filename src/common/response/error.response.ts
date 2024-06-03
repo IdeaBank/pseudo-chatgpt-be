@@ -1,7 +1,8 @@
 import {
   ForbiddenException,
   NotAcceptableException,
-  NotFoundException
+  NotFoundException,
+  UnauthorizedException
 } from '@nestjs/common';
 
 export class ErrorType {
@@ -19,4 +20,8 @@ export class ErrorType {
   public static FORBIDDEN_ACCESS = () => {
     return new ForbiddenException('접근 권한이 없습니다!');
   };
+
+  public static UNAUTHORIZED = () => {
+    return new UnauthorizedException('허가되지 않은 접근입니다!');
+  }
 }
