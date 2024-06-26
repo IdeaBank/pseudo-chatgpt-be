@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Request, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Request, UsePipes, ValidationPipe } from '@nestjs/common';
 
 import { AuthService } from '@auth/auth.service';
 import { Public } from '@common/public.annotation';
@@ -16,7 +16,7 @@ export class AuthController {
     }
 
     @Get('profile')
-    public async getProfile(@Request() req: any): Promise<any> {
+    public async getProfile(@Req() req: any): Promise<any> {
         return { uuid: req.user.uuid };
     }
 }

@@ -5,6 +5,7 @@ import { ChatHistoryService } from '@chat-history/chat-history.service';
 import { ChatHistory } from '@chat-history/entities/chat-history.entity';
 import { ChatRepository } from '@chat/chat.repository';
 import { Chat } from '@chat/entities/chat.entity';
+import { ErrorType } from '@common/response/error.response';
 
 @Injectable()
 export class ChatService {
@@ -16,10 +17,7 @@ export class ChatService {
     private chatHistoryService: ChatHistoryService
   ) { }
 
-  public async findUserChats(): Promise<Chat[]> {
-    // TODO: User uuid 얻어오기
-    let uuid = '';
-
+  public async findUserChats(uuid: string): Promise<Chat[]> {
     let chats = await this.chatRepository.find({
       where: {
         user: { uuid: uuid }
@@ -29,9 +27,9 @@ export class ChatService {
     return chats;
   }
 
-  public async getChatHistory(chat_id: number): Promise<ChatHistory[]> {
-    if (!(await this.isOwningChat(chat_id))) {
-      return Promise.reject();
+  public async getChatHistory(uuid: string, chat_id: number): Promise<ChatHistory[]> {
+    if (!(await this.isOwningChat(uuid, chat_id))) {
+      throw ErrorType.FORBIDDEN_ACCESS();
     }
 
     let chatHistories: ChatHistory[] = await this.chatHistoryService.findByChatId(chat_id);
@@ -39,13 +37,12 @@ export class ChatService {
     return chatHistories;
   }
 
-  public async isOwningChat(chat_id: number): Promise<any> {
-    // TODO: User uuid 얻어오기
-    let uuid = '';
+  public async isOwningChat(uuid: string, chat_id: number): Promise<any> {
+    let chats: Chat[] = await this.findUserChats(uuid);
 
-    let chats: Chat[] = await this.findUserChats();
-
-    let isChatExist = chats.some(chat => { chat.user.uuid === uuid && chat.id === chat_id });
+    let isChatExist = chats.some(chat => {
+      chat.user.uuid === uuid && chat.id === chat_id
+    });
 
     if (!isChatExist)
       return false;
