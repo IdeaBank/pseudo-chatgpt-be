@@ -17,6 +17,10 @@ export class ErrorType {
     return new NotAcceptableException('해당 이메일을 가진 유저가 존재합니다!');
   };
 
+  public static CHAT_NOT_FOUND = () => {
+    return new NotFoundException('해당 아이디를 가진 채팅을 찾을 수 없습니다!');
+  }
+
   public static FORBIDDEN_ACCESS = () => {
     return new ForbiddenException('접근 권한이 없습니다!');
   };

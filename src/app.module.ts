@@ -12,12 +12,16 @@ import { DatabaseModule } from '@root/database.module';
 import { UserModule } from '@user/user.module';
 
 @Module({
-  imports: [UserModule, ChatHistoryModule, ChatModule, DatabaseModule, AuthModule],
+  imports: [
+    DatabaseModule,
+    UserModule, AuthModule,
+    ChatHistoryModule, ChatModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
     { provide: APP_GUARD, useClass: JwtAuthGuard },
-    { provide: APP_INTERCEPTOR, useClass: TransformInterceptor}
+    { provide: APP_INTERCEPTOR, useClass: TransformInterceptor }
   ],
 })
 export class AppModule { }

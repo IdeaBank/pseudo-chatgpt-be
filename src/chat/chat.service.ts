@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { ChatHistoryService } from '@chat-history/chat-history.service';
@@ -11,6 +11,8 @@ export class ChatService {
   constructor(
     @InjectRepository(ChatRepository)
     private chatRepository: ChatRepository,
+
+    @Inject(forwardRef(() => ChatHistoryService))
     private chatHistoryService: ChatHistoryService
   ) { }
 
@@ -27,27 +29,33 @@ export class ChatService {
     return chats;
   }
 
-  public async getChatHistory(id: number): Promise<ChatHistory[]> {
-    if (!(await this.isOwningChat(id))) {
+  public async getChatHistory(chat_id: number): Promise<ChatHistory[]> {
+    if (!(await this.isOwningChat(chat_id))) {
       return Promise.reject();
     }
 
-    let chatHistories: ChatHistory[] = await this.chatHistoryService.findByChatId(id);
+    let chatHistories: ChatHistory[] = await this.chatHistoryService.findByChatId(chat_id);
 
     return chatHistories;
   }
 
-  public async isOwningChat(id: number): Promise<any> {
+  public async isOwningChat(chat_id: number): Promise<any> {
     // TODO: User uuid 얻어오기
     let uuid = '';
 
     let chats: Chat[] = await this.findUserChats();
 
-    let isChatExist = chats.some(chat => { chat.user.uuid === uuid && chat.id === id });
+    let isChatExist = chats.some(chat => { chat.user.uuid === uuid && chat.id === chat_id });
 
     if (!isChatExist)
       return false;
 
     return true;
+  }
+
+  public async findChatById(chat_id: number) {
+    return await this.chatRepository.findOne({
+      where: { id: chat_id }
+    });
   }
 }

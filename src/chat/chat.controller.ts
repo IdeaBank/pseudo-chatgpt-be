@@ -15,6 +15,4 @@ export class ChatController {
   public async getChatHistory() {
     return await this.chatService.getChatHistory(1);
   }
-
-  
 }
