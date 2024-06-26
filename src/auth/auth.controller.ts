@@ -14,9 +14,4 @@ export class AuthController {
     public async login(@Body() loginDto: LoginDto): Promise<any> {
         return await this.authService.login(loginDto);
     }
-
-    @Get('profile')
-    public async getProfile(@Req() req: any): Promise<any> {
-        return { uuid: req.user.uuid };
-    }
 }
